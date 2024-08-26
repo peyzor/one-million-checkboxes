@@ -1,34 +1,30 @@
 import json
 
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 
 
-class ChatConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
 
-        async_to_sync(self.channel_layer.group_add)(
-            'test',
-            self.channel_name
-        )
+        await self.channel_layer.group_add('test', self.channel_name)
 
-    def receive(self, text_data=None, bytes_data=None):
+    async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
-        async_to_sync(self.channel_layer.group_send)(
+        await self.channel_layer.group_send(
             'test',
             {
-                'type': 'chat_message',
+                'type': 'chat.message',
                 'message': message
             }
         )
 
-    def chat_message(self, event):
+    async def chat_message(self, event):
         message = event['message']
 
         response = f"""
             <ul hx-swap-oob="beforeend:#notifications"><li class="message">{message}</li></ul>
         """
-        self.send(text_data=response)
+        await self.send(text_data=response)
