@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Checkboxes</title>
     <script src="https://unpkg.com/htmx.org@2.0.2"
             integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ"
             crossorigin="anonymous">
@@ -15,9 +15,9 @@
 <body>
 
 <h1>Let's Test</h1>
-<div hx-ext="ws" ws-connect="ws/check/">
+<div hx-ext="ws" ws-connect="/ws/checks/">
     {% for i in loop_64 %}
-        <input type="checkbox" id="box-{{ i }}" name="box-{{ i }}" value="1" ws-send>
+        <input type="checkbox" id="check-{{ i }}" name="status" value=1 ws-send>
     {% endfor %}
 </div>
 </body>
