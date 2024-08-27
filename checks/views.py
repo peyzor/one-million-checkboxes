@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
 
-def my_test_view(request):
-    return render(request, 'checks/my_test.html')
+def home(request):
+    context = {'loop_64': range(64)}
+    return render(request, 'checks/home.html', context=context)

@@ -13,10 +13,12 @@
     <script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
 </head>
 <body>
+
 <h1>Let's Test</h1>
-<div hx-ext="ws" ws-connect="/checks/ws/test/">
-    <ul id="notifications"></ul>
-    <input type="checkbox" id="vehicle" name="vehicle" value="Bike" ws-send>
+<div hx-ext="ws" ws-connect="ws/check/">
+    {% for i in loop_64 %}
+        <input type="checkbox" id="box-{{ i }}" name="box-{{ i }}" value="1" ws-send>
+    {% endfor %}
 </div>
 </body>
 </html>
