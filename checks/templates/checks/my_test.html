@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/htmx.org@2.0.2"
+            integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ"
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
+</head>
+<body>
+<h1>Let's Test</h1>
+<div hx-ext="ws" ws-connect="/checks/ws/test/">
+    <ul id="notifications"></ul>
+    <input type="checkbox" id="vehicle" name="vehicle" value="Bike" ws-send>
+</div>
+</body>
+</html>
