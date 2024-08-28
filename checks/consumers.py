@@ -43,12 +43,10 @@ class CheckConsumer(AsyncWebsocketConsumer):
         )
 
     async def update_checkbox(self, event):
-        status = event['status']
-        origin = event['origin']
-        count = event['count']
-
-        response = f"""
-            <p id="count" hx-swap-oob="true">{count}</p>
-            <input type="checkbox" id="{origin}" name="status" value={1 - status} {"checked" if status else ""} ws-send>
-        """
+        context = {
+            'status': event['status'],
+            'origin': event['origin'],
+            'count': event['count']
+        }
+        response = render_to_string('checks/update_checkbox.html', context=context)
         await self.send(text_data=response)

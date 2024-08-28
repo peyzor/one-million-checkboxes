@@ -2,7 +2,12 @@
     <h2>Total Checked Boxes:</h2>
     <p id="count" hx-swap-oob="true">{{ count }}</p>
     {% for i, status in statuses %}
-        <input type="checkbox" id="check-{{ i }}" name="status" value="{% if status == 0 %}1{% else %}0{% endif %}"
-               {% if status == 1 %}checked{% endif %} ws-send>
+        <input type="checkbox"
+               id="check-{{ i }}"
+               name="status"
+               value="{% if status == 0 %}1{% else %}0{% endif %}"
+               {% if status == 1 %}checked{% endif %}
+               ws-send
+        >
     {% endfor %}
 </div>
