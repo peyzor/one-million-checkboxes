@@ -1,5 +1,6 @@
 import redis
 
+CHECKS_BITSET_LENGTH = 1000
 CHECKS_BITSET_KEY = 'checks'
 
 

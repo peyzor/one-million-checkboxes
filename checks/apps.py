@@ -1,5 +1,6 @@
 from django.apps import AppConfig
-from omcb.redis_connection import get_redis_client, CHECKS_BITSET_KEY
+
+from omcb import redis_connection
 
 
 class ChecksConfig(AppConfig):
@@ -7,7 +8,7 @@ class ChecksConfig(AppConfig):
     name = 'checks'
 
     def ready(self):
-        redis_client = get_redis_client()
+        redis_client = redis_connection.get_redis_client()
 
-        if not redis_client.exists(CHECKS_BITSET_KEY):
-            redis_client.setbit(CHECKS_BITSET_KEY, 1000 - 1, 0)
+        if not redis_client.exists(redis_connection.CHECKS_BITSET_KEY):
+            redis_client.setbit(redis_connection.CHECKS_BITSET_KEY, redis_connection.CHECKS_BITSET_LENGTH - 1, 0)
