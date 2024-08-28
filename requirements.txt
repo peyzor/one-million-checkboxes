@@ -3,3 +3,4 @@ channels[daphne]==4.1.0
 channels-redis==4.2.0
 uvicorn[standard]==0.30.6
 selenium==4.23.1
+webdriver-manager==4.0.2
