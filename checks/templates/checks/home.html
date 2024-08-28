@@ -14,11 +14,9 @@
 </head>
 <body>
 
-<h1>Let's Test</h1>
-<div hx-ext="ws" ws-connect="/ws/checks/">
-    {% for i in loop_64 %}
-        <input type="checkbox" id="check-{{ i }}" name="status" value=1 ws-send>
-    {% endfor %}
+<h1>Let's Check</h1>
+<div id="socket" hx-ext="ws" ws-connect="/ws/checks/">
+    <div id="state"></div>
 </div>
 </body>
 </html>
