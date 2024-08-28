@@ -1,12 +1,13 @@
 import random
 import time
-from omcb import redis_connection
 
 from channels.testing import ChannelsLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+
+from omcb import redis_connection
 
 
 class ChecksSeleniumTests(ChannelsLiveServerTestCase):
@@ -15,18 +16,34 @@ class ChecksSeleniumTests(ChannelsLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        cls.selenium.implicitly_wait(3)
+        cls.selenium1 = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        cls.selenium2 = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        cls.selenium1.implicitly_wait(3)
+        cls.selenium2.implicitly_wait(3)
 
     @classmethod
     def tearDownClass(cls):
-        cls.selenium.quit()
+        cls.selenium1.quit()
+        cls.selenium2.quit()
         super().tearDownClass()
 
     def test_checks(self):
-        self.selenium.get(f"{self.live_server_url}/")
-        for _ in range(100):
+        self.selenium1.get(f"{self.live_server_url}/")
+        self.selenium2.get(f"{self.live_server_url}/")
+
+        for _ in range(5):
             offset = random.randint(0, redis_connection.CHECKS_BITSET_LENGTH - 1)
-            checkbox = self.selenium.find_element(By.ID, f'check-{offset}')
-            checkbox.click()
-            time.sleep(0.1)
+
+            self.selenium1.find_element(By.ID, f'check-{offset}').click()
+            time.sleep(0.5)
+
+            selenium1_is_selected = self.selenium1.find_element(By.ID, f'check-{offset}').is_selected()
+            selenium2_is_selected = self.selenium2.find_element(By.ID, f'check-{offset}').is_selected()
+            self.assertEqual(selenium1_is_selected, selenium2_is_selected)
+
+            self.selenium2.find_element(By.ID, f'check-{offset}').click()
+            time.sleep(0.5)
+
+            selenium1_is_selected = self.selenium1.find_element(By.ID, f'check-{offset}').is_selected()
+            selenium2_is_selected = self.selenium2.find_element(By.ID, f'check-{offset}').is_selected()
+            self.assertEqual(selenium1_is_selected, selenium2_is_selected)
