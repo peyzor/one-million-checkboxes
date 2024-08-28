@@ -3,6 +3,9 @@ from omcb import redis_connection
 
 def get_initial_state(redis_client):
     checks_bitset = redis_client.get(redis_connection.CHECKS_BITSET_KEY)
+    if not checks_bitset:
+        raise Exception('bitset not found')
+
     count = redis_client.bitcount(redis_connection.CHECKS_BITSET_KEY)
 
     statuses = []
