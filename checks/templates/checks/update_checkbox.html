@@ -1,8 +1,9 @@
 <p id="count" hx-swap-oob="true">{{ count }}</p>
-<input type="checkbox"
-       id="{{ origin }}"
-       name="status"
-       value="{% if status == 0 %}1{% else %}0{% endif %}"
-       {% if status == 1 %}checked{% endif %}
-       ws-send
+<input
+        type="checkbox"
+        id="{{ origin }}"
+        name="status"
+        value="{% if status == 0 %}1{% else %}0{% endif %}"
+        {% if status == 1 %}checked{% endif %}
+        ws-send
 >
