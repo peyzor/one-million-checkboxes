@@ -59,5 +59,6 @@ class ChecksSeleniumTests(ChannelsLiveServerTestCase):
             offset2 = random.randint(0, redis_connection.CHECKS_BITSET_LENGTH - 1)
 
             self.selenium1.find_element(By.ID, f'check-{offset1}').click()
+            time.sleep(0.1)
             self.selenium2.find_element(By.ID, f'check-{offset2}').click()
             time.sleep(0.1)
