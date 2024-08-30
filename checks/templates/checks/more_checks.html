@@ -1,22 +1,21 @@
-<div class="checkbox-container">
-    {% for i, status in checks %}
-        <input
-                type="checkbox"
-                id="check-{{ i }}"
-                name="status"
-                value="{% if status == 0 %}1{% else %}0{% endif %}"
-                {% if status == 1 %}checked{% endif %}
-                ws-send
-        >
-    {% endfor %}
-</div>
+{% for i, status in checks %}
+    <input
+            type="checkbox"
+            id="check-{{ i }}"
+            name="status"
+            value="{% if status == 0 %}1{% else %}0{% endif %}"
+            {% if status == 1 %}checked{% endif %}
+            ws-send
+    >
+{% endfor %}
 
 <div
         id="more-checks"
+        hx-swap-oob="true"
         hx-get="/more-checks/"
         hx-trigger="revealed"
-        hx-target="this"
-        hx-swap="outerHTML"
+        hx-target="#checkbox-container"
+        hx-swap="beforeend"
         hx-vals='{"limit": {{ limit }}, "offset": {{ offset }}}'
 >
 </div>
