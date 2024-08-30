@@ -1,7 +1,5 @@
-<div id="state" hx-swap-oob="true">
-    <h2>Total Checked Boxes:</h2>
-    <p id="count" hx-swap-oob="true">{{ count }}</p>
-    {% for i, status in statuses %}
+<div class="checkbox-container">
+    {% for i, status in checks %}
         <input
                 type="checkbox"
                 id="check-{{ i }}"
@@ -11,4 +9,14 @@
                 ws-send
         >
     {% endfor %}
+</div>
+
+<div
+        id="more-checks"
+        hx-get="/more-checks/"
+        hx-trigger="revealed"
+        hx-target="this"
+        hx-swap="outerHTML"
+        hx-vals='{"limit": {{ limit }}, "offset": {{ offset }}}'
+>
 </div>

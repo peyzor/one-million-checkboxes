@@ -1,0 +1,27 @@
+<div id="state" hx-swap-oob="true">
+    <h2>Total Checked Boxes:</h2>
+    <p id="count" hx-swap-oob="true">{{ count }}</p>
+
+    <div class="checkbox-container">
+        {% for i, status in checks %}
+            <input
+                    type="checkbox"
+                    id="check-{{ i }}"
+                    name="status"
+                    value="{% if status == 0 %}1{% else %}0{% endif %}"
+                    {% if status == 1 %}checked{% endif %}
+                    ws-send
+            >
+        {% endfor %}
+    </div>
+
+    <div
+            id="more-checks"
+            hx-get="/more-checks/"
+            hx-trigger="revealed"
+            hx-target="this"
+            hx-swap="outerHTML"
+            hx-vals='{"limit": {{ limit }}, "offset": {{ offset }}}'
+    >
+    </div>
+</div>

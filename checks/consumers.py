@@ -3,7 +3,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 
-from checks.utils import get_initial_state
+from checks.utils import get_checks
 from omcb import redis_connection
 
 
@@ -17,12 +17,23 @@ class CheckConsumer(AsyncWebsocketConsumer):
 
         await self.channel_layer.group_add('global', self.channel_name)
 
-        initial_state = get_initial_state(self.redis_client)
-        response = render_to_string('checks/initial_state.html', context=initial_state)
+        limit = redis_connection.CHECKS_BITSET_LIMIT
+        checks = get_checks(self.redis_client, limit=limit, offset=0)
+        count = self.redis_client.bitcount(redis_connection.CHECKS_BITSET_KEY)
+
+        context = {
+            'checks': checks,
+            'count': count,
+            'limit': limit,
+            'offset': limit,
+        }
+        response = render_to_string('checks/initial_checks.html', context=context)
 
         await self.send(text_data=response)
 
     async def receive(self, text_data=None, bytes_data=None):
+        assert text_data is not None
+
         text_data_json = json.loads(text_data)
         status = int(text_data_json.get('status', 0))
         origin = text_data_json['HEADERS']['HX-Trigger']
