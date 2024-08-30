@@ -2,6 +2,7 @@
 
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -10,12 +11,16 @@
     <title>Checkboxes</title>
     <script src="{% static 'checks/js/htmx.min.js' %}" defer></script>
     <script src="{% static 'checks/js/htmx-ext-ws.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'checks/css/styles.css' %}">
 </head>
+
 <body>
 
 <h1>Let's Check</h1>
 <div id="socket" hx-ext="ws" ws-connect="/ws/checks/">
     <div id="state"></div>
 </div>
+
 </body>
+
 </html>
