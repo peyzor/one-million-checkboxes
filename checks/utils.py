@@ -1,18 +1,20 @@
 from omcb import redis_connection
 
 
-def get_initial_state(redis_client):
+def get_checks(redis_client, limit, offset):
     checks_bitset = redis_client.get(redis_connection.CHECKS_BITSET_KEY)
-    if not checks_bitset:
-        raise Exception('bitset not found')
+    assert checks_bitset is not None
 
-    count = redis_client.bitcount(redis_connection.CHECKS_BITSET_KEY)
+    start = offset // 8
+    end = start + limit // 8
 
-    statuses = []
-    for b in checks_bitset:
-        for i in range(7, -1, -1):
-            status = (b >> i) & 1
-            statuses.append(status)
+    checks = []
+    for i in range(start, end):
+        b = checks_bitset[i]
 
-    context = {'statuses': enumerate(statuses), 'count': count}
-    return context
+        for j in range(7, -1, -1):
+            status = (b >> j) & 1
+            offset = i * 8 + (7 - j)
+            checks.append((offset, status))
+
+    return checks
