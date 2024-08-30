@@ -1,0 +1,12 @@
+.checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin: 5px;
+    transform: scale(1.5);
+}
