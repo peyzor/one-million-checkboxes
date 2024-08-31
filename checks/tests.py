@@ -39,13 +39,13 @@ class ChecksSeleniumTests(ChannelsLiveServerTestCase):
         self.selenium1.get(f"{self.live_server_url}/")
         self.selenium2.get(f"{self.live_server_url}/")
 
-        for _ in range(5):
+        for _ in range(10):
             self.scroll_to_bottom(self.selenium1)
             self.scroll_to_bottom(self.selenium2)
             time.sleep(0.1)
 
         for _ in range(10):
-            offset = random.randint(0, 3 * redis_connection.CHECKS_BITSET_LIMIT - 1)
+            offset = random.randint(0, 5 * redis_connection.CHECKS_BITSET_LIMIT - 1)
 
             self.selenium1.find_element(By.ID, f'check-{offset}').click()
             time.sleep(0.5)
@@ -66,14 +66,14 @@ class ChecksSeleniumTests(ChannelsLiveServerTestCase):
         self.selenium1.get(f"{self.live_server_url}/")
         self.selenium2.get(f"{self.live_server_url}/")
 
-        for _ in range(10):
+        for _ in range(20):
             self.scroll_to_bottom(self.selenium1)
             self.scroll_to_bottom(self.selenium2)
             time.sleep(0.1)
 
         for i in range(1000):
-            offset1 = random.randint(0, 8 * redis_connection.CHECKS_BITSET_LIMIT - 1)
-            offset2 = random.randint(0, 8 * redis_connection.CHECKS_BITSET_LIMIT - 1)
+            offset1 = random.randint(0, 10 * redis_connection.CHECKS_BITSET_LIMIT - 1)
+            offset2 = random.randint(0, 10 * redis_connection.CHECKS_BITSET_LIMIT - 1)
 
             try:
                 self.selenium1.find_element(By.ID, f'check-{offset1}').click()
