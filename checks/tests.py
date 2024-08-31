@@ -5,6 +5,7 @@ from unittest import skip
 from channels.testing import ChannelsLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -18,10 +19,12 @@ class ChecksSeleniumTests(ChannelsLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium1 = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        cls.selenium2 = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        cls.selenium1.implicitly_wait(3)
-        cls.selenium2.implicitly_wait(3)
+
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+
+        cls.selenium1 = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+        cls.selenium2 = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
 
     @classmethod
     def tearDownClass(cls):
