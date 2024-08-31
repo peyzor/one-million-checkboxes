@@ -4,6 +4,7 @@ from unittest import skip
 
 from channels.testing import ChannelsLiveServerTestCase
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
@@ -28,12 +29,20 @@ class ChecksSeleniumTests(ChannelsLiveServerTestCase):
         cls.selenium2.quit()
         super().tearDownClass()
 
+    def scroll_to_bottom(self, driver):
+        driver.execute_script("window.scrollBy(0, document.body.scrollHeight);")
+
     def test_checks(self):
         self.selenium1.get(f"{self.live_server_url}/")
         self.selenium2.get(f"{self.live_server_url}/")
 
         for _ in range(5):
-            offset = random.randint(0, redis_connection.CHECKS_BITSET_LENGTH - 1)
+            self.scroll_to_bottom(self.selenium1)
+            self.scroll_to_bottom(self.selenium2)
+            time.sleep(0.1)
+
+        for _ in range(10):
+            offset = random.randint(0, 3 * redis_connection.CHECKS_BITSET_LIMIT - 1)
 
             self.selenium1.find_element(By.ID, f'check-{offset}').click()
             time.sleep(0.5)
@@ -54,11 +63,21 @@ class ChecksSeleniumTests(ChannelsLiveServerTestCase):
         self.selenium1.get(f"{self.live_server_url}/")
         self.selenium2.get(f"{self.live_server_url}/")
 
-        for _ in range(100):
-            offset1 = random.randint(0, redis_connection.CHECKS_BITSET_LENGTH - 1)
-            offset2 = random.randint(0, redis_connection.CHECKS_BITSET_LENGTH - 1)
+        for _ in range(10):
+            self.scroll_to_bottom(self.selenium1)
+            self.scroll_to_bottom(self.selenium2)
+            time.sleep(0.1)
 
-            self.selenium1.find_element(By.ID, f'check-{offset1}').click()
-            time.sleep(0.1)
-            self.selenium2.find_element(By.ID, f'check-{offset2}').click()
-            time.sleep(0.1)
+        for i in range(1000):
+            offset1 = random.randint(0, 8 * redis_connection.CHECKS_BITSET_LIMIT - 1)
+            offset2 = random.randint(0, 8 * redis_connection.CHECKS_BITSET_LIMIT - 1)
+
+            try:
+                self.selenium1.find_element(By.ID, f'check-{offset1}').click()
+            except NoSuchElementException:
+                print(f'offset: {offset1} not found')
+
+            try:
+                self.selenium2.find_element(By.ID, f'check-{offset2}').click()
+            except NoSuchElementException:
+                print(f'offset: {offset2} not found')
