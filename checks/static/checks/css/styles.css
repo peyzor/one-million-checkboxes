@@ -10,3 +10,16 @@
     margin: 4px;
     transform: scale(1.5);
 }
+
+#title {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#subtitle {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+}
