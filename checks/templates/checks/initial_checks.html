@@ -1,6 +1,5 @@
 <div id="state" hx-swap-oob="true">
-    <h2>Total Checked Boxes:</h2>
-    <p id="count" hx-swap-oob="true">{{ count }}</p>
+    <p id="count-container"><span id="count" hx-swap-oob="true">{{ count }}</span> <b>boxes are ticked</b></p>
 
     <div id="checkbox-container">
         {% for i, status in checks %}
